@@ -11,7 +11,9 @@ users_audit.sql is used to update user audits
 
 code keeps track of new users in order to verify and track transactions
 
-To test, run users.ddl and users_audit.ddl first. Then run insert_users.dml to add users. Then run users_audit.sql to update the audit trail. 
+To test, run users.ddl and users_audit.ddl first. Then run insert_users.dml to add users. Then run users_audit.sql to update the audit trail.
+
+Credit to @vkhazin for mentorship and guidance throughout this project.
 
 ## Create pipvenv and install dependencies
 

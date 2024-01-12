@@ -1,0 +1,3 @@
+delete
+from gbq_table_audit.users_audit
+where true

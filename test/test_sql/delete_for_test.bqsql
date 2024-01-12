@@ -1,0 +1,6 @@
+DELETE
+FROM gbq_table_audit.users
+WHERE users.first_name in
+(
+    "Daniel"
+)

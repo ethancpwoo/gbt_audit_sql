@@ -1,0 +1,8 @@
+DELETE
+FROM gbq_table_audit.users_audit
+WHERE id in(
+    4444,
+    1111,
+    2222,
+    3333
+)

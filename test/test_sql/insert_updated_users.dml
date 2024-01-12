@@ -1,0 +1,13 @@
+INSERT INTO gbq_table_audit.users
+(
+    first_name, 
+    last_name, 
+    id
+) 
+SELECT* 
+FROM (
+    SELECT
+        "Daniel1",
+        "Khazin1", 
+        4444
+) 

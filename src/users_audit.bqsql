@@ -1,0 +1,81 @@
+insert into gbq_table_audit.users_audit(
+    id, 
+    first_name,
+    last_name,
+    change_type,
+    change_datetime,
+    version_num
+)
+
+with recent_audit as 
+(
+    select *
+    from gbq_table_audit.users_audit ref
+    where ref.change_datetime = (
+        select max(users_audit.change_datetime)
+        from gbq_table_audit.users_audit
+        where users_audit.id = ref.id
+    )
+)
+
+select * 
+from 
+(
+    -- insert
+    select users.id,
+    users.first_name,
+    users.last_name,
+    'insert',
+    current_datetime(),
+    MD5(CONCAT(users.id, users.first_name, users.last_name)),
+    from gbq_table_audit.users
+    where not exists(
+        select null 
+        from gbq_table_audit.users_audit
+        where users.id = users_audit.id 
+        /* insert where there isnt the same ids */
+    )
+
+    union all
+
+    --update
+    select users.id,
+    users.first_name,
+    users.last_name,
+    'update',
+    current_datetime(),
+    MD5(CONCAT(users.id, users.first_name, users.last_name)),
+    from gbq_table_audit.users
+    where exists(
+        select null
+        from recent_audit
+        where recent_audit.id = users.id
+        and (recent_audit.first_name != users.first_name
+        or recent_audit.last_name != users.last_name)
+        /* update when ID is the same but names are not same */
+    )
+
+    union all 
+
+    --delete
+    select recent_audit.id,
+    recent_audit.first_name,
+    recent_audit.last_name,
+    'delete',
+    current_datetime(),
+    recent_audit.version_num,
+    from recent_audit 
+    where not exists(
+        select null
+        from gbq_table_audit.users
+        where recent_audit.id = users.id
+        /* insert where there isnt the same ids */
+    )
+    and not exists(
+        select null
+        from recent_audit as t0
+        where t0.id = recent_audit.id
+        and t0.change_type = 'delete'
+    )
+
+);

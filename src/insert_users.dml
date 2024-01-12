@@ -1,0 +1,28 @@
+INSERT INTO gbq_table_audit.users
+(
+    first_name, 
+    last_name, 
+    id
+) 
+SELECT* 
+FROM (
+    SELECT
+        "Daniel",
+        "Khazin", 
+        4444
+    UNION ALL
+    SELECT 
+        "Ethan",
+        "Woo",
+        1111
+    UNION ALL 
+    SELECT 
+        "Matthew",
+        "Cheung",
+        2222
+    UNION ALL
+    SELECT
+        "Marcus",
+        "Cheung",
+        3333
+) 
